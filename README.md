@@ -1,53 +1,72 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/B74p-HKt)
-# 📦 Sistema de Controle de Estoque - Enfermagem
+# Controle de Almoxarifado
 
-## 📌 Descrição do Projeto
+## Descrição
 
-Este projeto tem como objetivo o desenvolvimento de um sistema simples de controle de estoque voltado para o ambiente de enfermagem. A aplicação permite o cadastro e a listagem de materiais utilizados no dia a dia, com integração a uma API simulada (MockAPI), possibilitando a persistência dos dados.
+Sistema web para controle de estoque de materiais utilizando HTML, CSS, JavaScript e MockAPI.
 
-O sistema foi desenvolvido como parte de uma atividade acadêmica com foco em levantamento de requisitos e implementação inicial (Sprint 1).
+O sistema permite cadastrar materiais, visualizar a lista de itens cadastrados, realizar baixa de estoque e excluir materiais do sistema.
 
----
+## Tecnologias Utilizadas
 
-## 🎯 Problema abordado
+* HTML5
+* CSS3
+* JavaScript
+* MockAPI
+* Git e GitHub
 
-Atualmente, o controle de estoque é realizado de forma manual utilizando planilhas Excel, o que gera dificuldades como:
+## Funcionalidades
 
-- Necessidade de anotações em papel antes da atualização
-- Falta de atualização automática de entradas e saídas
-- Possibilidade de erros em cálculos manuais
-- Dificuldade de controle em tempo real
+### Cadastro de Materiais (POST)
 
----
+Permite cadastrar novos materiais informando:
 
-## 💡 Solução proposta
+* Nome do material
+* Quantidade em estoque
 
-Foi desenvolvido um sistema web simples que permite:
+Os dados são enviados para a MockAPI através do método POST.
 
-- Cadastro de materiais em tempo real
-- Armazenamento de dados em API (MockAPI)
-- Listagem automática dos itens cadastrados
-- Interface simples e funcional para uso prático
+### Listagem de Materiais (GET)
 
----
+Ao carregar a página, o sistema consulta a MockAPI e exibe todos os materiais cadastrados em uma tabela.
 
-## ⚙️ Funcionalidades
+### Baixa de Estoque (PUT)
 
-- Inserção de nome do material
-- Inserção de quantidade
-- Cadastro de materiais via botão
-- Listagem automática dos dados da API
-- Atualização dinâmica da tabela
+Permite retirar uma quantidade do estoque de um material já cadastrado.
 
----
+Antes da atualização é realizada uma validação através da função:
 
-## 🛠 Tecnologias utilizadas
+```javascript
+function validarRetirada(estoqueAtual, quantidadeRetirada)
+```
 
-- HTML5
-- CSS3
-- JavaScript (Vanilla)
-- MockAPI (API simulada)
+A função impede:
 
----
+* Quantidades negativas
+* Quantidade igual a zero
+* Quantidades maiores que o estoque disponível
 
-## 🔗 API utilizada
+Após a validação, a quantidade é atualizada na MockAPI utilizando o método PUT.
+
+### Exclusão de Materiais (DELETE)
+
+Permite remover materiais do sistema utilizando o método DELETE da MockAPI.
+
+Após a exclusão, a lista é atualizada automaticamente.
+
+## Regras de Negócio
+
+* Não é permitido cadastrar materiais com quantidade menor ou igual a zero.
+* Não é permitido retirar quantidade igual ou menor que zero.
+* Não é permitido retirar quantidade superior ao estoque disponível.
+* A exclusão remove permanentemente o material da base de dados.
+
+## Estrutura do Projeto
+
+* index.html → Estrutura da página.
+* style.css → Estilização da interface.
+* main.js → Lógica da aplicação e integração com a API.
+
+## Autor
+
+Anderson Caetano
+Curso de Análise e Desenvolvimento de Sistemas – UNICESUMAR
