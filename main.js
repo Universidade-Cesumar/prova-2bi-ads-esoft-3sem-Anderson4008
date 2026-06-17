@@ -1,8 +1,15 @@
 console.log("JS carregou");
+
 const API_URL = "https://6a29e879f59cb8f65f1dc17d.mockapi.io/api/v1/materiais";
+
+function validarRetirada(estoqueAtual, quantidadeRetirada) {
+    return quantidadeRetirada > 0 &&
+           quantidadeRetirada <= estoqueAtual;
+}
 
 const inputNome = document.getElementById("input-nome");
 const inputQuantidade = document.getElementById("input-quantidade");
+const inputRetirada = document.getElementById("input-retirada");
 const btnCadastrar = document.getElementById("btn-cadastrar");
 const listaMateriais = document.getElementById("lista-materiais");
 
@@ -24,9 +31,76 @@ async function carregarMateriais() {
             linha.innerHTML = `
                 <td>${material.nome}</td>
                 <td>${material.quantidade}</td>
+                <td>
+                    <button class="btn-baixar">Baixar</button>
+                    <button class="btn-excluir">Excluir</button>
+                </td>
             `;
 
             listaMateriais.appendChild(linha);
+
+            const btnExcluir = linha.querySelector(".btn-excluir");
+
+            btnExcluir.addEventListener("click", async () => {
+                try {
+                    const resposta = await fetch(`${API_URL}/${material.id}`, {
+                        method: "DELETE"
+                    });
+
+                    if (!resposta.ok) {
+                        throw new Error("Erro ao excluir");
+                    }
+
+                    await carregarMateriais();
+
+                } catch (erro) {
+                    console.error(erro);
+                    alert("Erro ao excluir material.");
+                }
+            });
+
+            const btnBaixar = linha.querySelector(".btn-baixar");
+
+            btnBaixar.addEventListener("click", async () => {
+
+                const quantidadeRetirada = Number(inputRetirada.value);
+
+                if (!validarRetirada(material.quantidade, quantidadeRetirada)) {
+                    alert("Quantidade inválida.");
+                    return;
+                }
+
+                const novaQuantidade =
+                    material.quantidade - quantidadeRetirada;
+
+                try {
+
+                    const resposta = await fetch(`${API_URL}/${material.id}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            nome: material.nome,
+                            quantidade: novaQuantidade
+                        })
+                    });
+
+                    if (!resposta.ok) {
+                        throw new Error("Erro ao atualizar");
+                    }
+
+                    inputRetirada.value = "";
+
+                    await carregarMateriais();
+
+                    alert("Baixa realizada com sucesso!");
+
+                } catch (erro) {
+                    console.error(erro);
+                    alert("Erro ao atualizar estoque.");
+                }
+            });
         });
 
     } catch (erro) {
@@ -37,7 +111,7 @@ async function carregarMateriais() {
 
 async function cadastrarMaterial() {
 
-     console.log("Botão clicado");
+    console.log("Botão clicado");
 
     try {
         const nome = inputNome.value.trim();
