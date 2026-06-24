@@ -154,6 +154,11 @@ async function cadastrarMaterial() {
     }
 }
 
+function atualizarTotal(materiais) {
+    const total = materiais.length;
+    totalItens.textContent = total;
+}
+
 btnCadastrar.addEventListener("click", cadastrarMaterial);
 
 window.addEventListener("load", carregarMateriais);
