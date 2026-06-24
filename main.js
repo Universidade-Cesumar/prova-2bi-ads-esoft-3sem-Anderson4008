@@ -157,6 +157,9 @@ async function cadastrarMaterial() {
 function atualizarTotal(materiais) {
     const total = materiais.length;
     totalItens.textContent = total;
+    if (material.quantidade < 10) {
+    linha.classList.add("estoque-critico");
+}
 }
 
 btnCadastrar.addEventListener("click", cadastrarMaterial);
