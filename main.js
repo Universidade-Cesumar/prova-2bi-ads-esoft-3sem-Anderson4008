@@ -12,6 +12,8 @@ const inputQuantidade = document.getElementById("input-quantidade");
 const inputRetirada = document.getElementById("input-retirada");
 const btnCadastrar = document.getElementById("btn-cadastrar");
 const listaMateriais = document.getElementById("lista-materiais");
+const inputBusca = document.getElementById("input-busca");
+const totalItens = document.getElementById("total-itens");
 
 async function carregarMateriais() {
     try {
