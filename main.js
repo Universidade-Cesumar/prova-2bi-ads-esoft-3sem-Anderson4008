@@ -162,6 +162,40 @@ function atualizarTotal(materiais) {
 }
 }
 
+inputBusca.addEventListener("input", async () => {
+    const termo = inputBusca.value.toLowerCase();
+
+    const resposta = await fetch(API_URL);
+    const materiais = await resposta.json();
+
+    const filtrados = materiais.filter(m =>
+        m.nome.toLowerCase().includes(termo)
+    );
+
+    listaMateriais.innerHTML = "";
+
+    filtrados.forEach(material => {
+        const linha = document.createElement("tr");
+
+        linha.innerHTML = `
+            <td>${material.nome}</td>
+            <td>${material.quantidade}</td>
+            <td>
+                <button class="btn-baixar">Baixar</button>
+                <button class="btn-excluir">Excluir</button>
+            </td>
+        `;
+
+        if (material.quantidade < 10) {
+            linha.classList.add("estoque-critico");
+        }
+
+        listaMateriais.appendChild(linha);
+    });
+
+    totalItens.textContent = filtrados.length;
+});
+
 btnCadastrar.addEventListener("click", cadastrarMaterial);
 
 window.addEventListener("load", carregarMateriais);
