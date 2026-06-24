@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f6f8;
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
 
     display: flex;
     justify-content: center;
@@ -11,7 +11,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 600px;
+    max-width: 650px;
 
     background: white;
     padding: 25px;
@@ -20,23 +20,54 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* TÍTULO */
 h1 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
 }
 
+/* DASHBOARD */
+.dashboard {
+    background: #e8f5e9;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.dashboard h3 {
+    margin: 0;
+    font-size: 14px;
+    color: #2e7d32;
+}
+
+#total-itens {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1b5e20;
+    margin: 5px 0 0 0;
+}
+
+/* INPUTS */
 input {
     width: 100%;
     padding: 10px;
-    margin: 8px 0;
+    margin: 6px 0;
 
     border-radius: 6px;
     border: 1px solid #ccc;
 
     box-sizing: border-box;
+    transition: 0.2s;
 }
 
+input:focus {
+    border-color: #2e7d32;
+    outline: none;
+}
+
+/* BOTÃO */
 button {
     width: 100%;
     padding: 10px;
@@ -49,13 +80,15 @@ button {
 
     cursor: pointer;
     font-size: 16px;
-    margin-top: 5px;
+    margin-top: 8px;
+    transition: 0.2s;
 }
 
 button:hover {
     background-color: #1b5e20;
 }
 
+/* TABELA */
 table {
     width: 100%;
     margin-top: 20px;
@@ -72,4 +105,36 @@ th, td {
 th {
     background-color: #2e7d32;
     color: white;
+}
+
+/* 🚨 ESTOQUE CRÍTICO (REQUISITO DA PROVA) */
+.estoque-critico {
+    background-color: #ffebee !important;
+    color: #c62828;
+    font-weight: bold;
+}
+
+/* FEEDBACK */
+#feedback {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* tipos de feedback */
+.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.error {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.info {
+    background-color: #e3f2fd;
+    color: #1565c0;
 }
