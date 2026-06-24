@@ -1,12 +1,9 @@
 console.log("JS carregou");
 
-const API_URL = "https://6a29e879f59cb8f65f1dc17d.mockapi.io/api/v1/materiais";
+const API_URL =
+    "https://6a29e879f59cb8f65f1dc17d.mockapi.io/api/v1/materiais";
 
-function validarRetirada(estoqueAtual, quantidadeRetirada) {
-    return quantidadeRetirada > 0 &&
-           quantidadeRetirada <= estoqueAtual;
-}
-
+// ===== ELEMENTOS =====
 const inputNome = document.getElementById("input-nome");
 const inputQuantidade = document.getElementById("input-quantidade");
 const inputRetirada = document.getElementById("input-retirada");
@@ -15,6 +12,18 @@ const listaMateriais = document.getElementById("lista-materiais");
 const inputBusca = document.getElementById("input-busca");
 const totalItens = document.getElementById("total-itens");
 
+// ===== VALIDAÇÃO =====
+function validarRetirada(estoqueAtual, quantidadeRetirada) {
+    return quantidadeRetirada > 0 &&
+        quantidadeRetirada <= estoqueAtual;
+}
+
+// ===== TOTAL =====
+function atualizarTotal(materiais) {
+    totalItens.textContent = materiais.length;
+}
+
+// ===== CARREGAR =====
 async function carregarMateriais() {
     try {
         const resposta = await fetch(API_URL);
@@ -30,6 +39,10 @@ async function carregarMateriais() {
         materiais.forEach(material => {
             const linha = document.createElement("tr");
 
+            if (material.quantidade < 10) {
+                linha.classList.add("estoque-critico");
+            }
+
             linha.innerHTML = `
                 <td>${material.nome}</td>
                 <td>${material.quantidade}</td>
@@ -41,6 +54,7 @@ async function carregarMateriais() {
 
             listaMateriais.appendChild(linha);
 
+            // EXCLUIR
             const btnExcluir = linha.querySelector(".btn-excluir");
 
             btnExcluir.addEventListener("click", async () => {
@@ -54,17 +68,16 @@ async function carregarMateriais() {
                     }
 
                     await carregarMateriais();
-
                 } catch (erro) {
                     console.error(erro);
                     alert("Erro ao excluir material.");
                 }
             });
 
+            // BAIXAR
             const btnBaixar = linha.querySelector(".btn-baixar");
 
             btnBaixar.addEventListener("click", async () => {
-
                 const quantidadeRetirada = Number(inputRetirada.value);
 
                 if (!validarRetirada(material.quantidade, quantidadeRetirada)) {
@@ -76,7 +89,6 @@ async function carregarMateriais() {
                     material.quantidade - quantidadeRetirada;
 
                 try {
-
                     const resposta = await fetch(`${API_URL}/${material.id}`, {
                         method: "PUT",
                         headers: {
@@ -97,7 +109,6 @@ async function carregarMateriais() {
                     await carregarMateriais();
 
                     alert("Baixa realizada com sucesso!");
-
                 } catch (erro) {
                     console.error(erro);
                     alert("Erro ao atualizar estoque.");
@@ -105,16 +116,16 @@ async function carregarMateriais() {
             });
         });
 
+        atualizarTotal(materiais);
+
     } catch (erro) {
         console.error("Erro ao carregar materiais:", erro);
         alert("Erro ao carregar materiais.");
     }
 }
 
+// ===== CADASTRAR =====
 async function cadastrarMaterial() {
-
-    console.log("Botão clicado");
-
     try {
         const nome = inputNome.value.trim();
         const quantidade = Number(inputQuantidade.value);
@@ -124,10 +135,7 @@ async function cadastrarMaterial() {
             return;
         }
 
-        const novoMaterial = {
-            nome: nome,
-            quantidade: quantidade
-        };
+        const novoMaterial = { nome, quantidade };
 
         const resposta = await fetch(API_URL, {
             method: "POST",
@@ -147,55 +155,56 @@ async function cadastrarMaterial() {
         await carregarMateriais();
 
         alert("Material cadastrado com sucesso!");
-
     } catch (erro) {
         console.error("Erro ao cadastrar:", erro);
         alert("Erro ao cadastrar material.");
     }
 }
 
-function atualizarTotal(materiais) {
-    const total = materiais.length;
-    totalItens.textContent = total;
-    if (material.quantidade < 10) {
-    linha.classList.add("estoque-critico");
-}
-}
-
 inputBusca.addEventListener("input", async () => {
     const termo = inputBusca.value.toLowerCase();
 
-    const resposta = await fetch(API_URL);
-    const materiais = await resposta.json();
+    try {
+        const resposta = await fetch(API_URL);
 
-    const filtrados = materiais.filter(m =>
-        m.nome.toLowerCase().includes(termo)
-    );
-
-    listaMateriais.innerHTML = "";
-
-    filtrados.forEach(material => {
-        const linha = document.createElement("tr");
-
-        linha.innerHTML = `
-            <td>${material.nome}</td>
-            <td>${material.quantidade}</td>
-            <td>
-                <button class="btn-baixar">Baixar</button>
-                <button class="btn-excluir">Excluir</button>
-            </td>
-        `;
-
-        if (material.quantidade < 10) {
-            linha.classList.add("estoque-critico");
+        if (!resposta.ok) {
+            throw new Error("Erro na busca");
         }
 
-        listaMateriais.appendChild(linha);
-    });
+        const materiais = await resposta.json();
 
-    totalItens.textContent = filtrados.length;
+        const filtrados = materiais.filter(m =>
+            m.nome.toLowerCase().includes(termo)
+        );
+
+        listaMateriais.innerHTML = "";
+
+        filtrados.forEach(material => {
+            const linha = document.createElement("tr");
+
+            if (material.quantidade < 10) {
+                linha.classList.add("estoque-critico");
+            }
+
+            linha.innerHTML = `
+                <td>${material.nome}</td>
+                <td>${material.quantidade}</td>
+                <td>
+                    <button class="btn-baixar">Baixar</button>
+                    <button class="btn-excluir">Excluir</button>
+                </td>
+            `;
+
+            listaMateriais.appendChild(linha);
+        });
+
+        totalItens.textContent = filtrados.length;
+
+    } catch (erro) {
+        console.error("Erro na busca:", erro);
+        alert("Erro de conexão.");
+    }
 });
 
 btnCadastrar.addEventListener("click", cadastrarMaterial);
-
 window.addEventListener("load", carregarMateriais);
