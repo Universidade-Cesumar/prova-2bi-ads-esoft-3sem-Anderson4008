@@ -1,72 +1,87 @@
-# Controle de Almoxarifado
+# 📦 Controle de Almoxarifado
 
-## Descrição
+## 📌 Descrição
 
-Sistema web para controle de estoque de materiais utilizando HTML, CSS, JavaScript e MockAPI.
+Sistema web para controle de estoque de materiais, desenvolvido com HTML, CSS e JavaScript, utilizando MockAPI como backend.
 
-O sistema permite cadastrar materiais, visualizar a lista de itens cadastrados, realizar baixa de estoque e excluir materiais do sistema.
+O sistema permite gerenciar materiais com operações de cadastro, listagem, busca, atualização de estoque (baixa), exclusão e alertas visuais de estoque crítico.
 
-## Tecnologias Utilizadas
+---
 
-* HTML5
-* CSS3
-* JavaScript
-* MockAPI
-* Git e GitHub
+## 🚀 Deploy
 
-## Funcionalidades
+🔗 Acesse o projeto online:  
 
-### Cadastro de Materiais (POST)
 
-Permite cadastrar novos materiais informando:
+---
 
-* Nome do material
-* Quantidade em estoque
+## 🛠 Tecnologias Utilizadas
 
-Os dados são enviados para a MockAPI através do método POST.
+- HTML5
+- CSS3
+- JavaScript (ES6+)
+- MockAPI
+- Git e GitHub
 
-### Listagem de Materiais (GET)
+---
 
-Ao carregar a página, o sistema consulta a MockAPI e exibe todos os materiais cadastrados em uma tabela.
+## ⚙️ Funcionalidades
 
-### Baixa de Estoque (PUT)
+### 📥 Cadastro de Materiais (POST)
+Permite adicionar novos materiais com nome e quantidade.
 
-Permite retirar uma quantidade do estoque de um material já cadastrado.
+---
 
-Antes da atualização é realizada uma validação através da função:
+### 📋 Listagem de Materiais (GET)
+Exibe todos os materiais cadastrados ao carregar a página.
 
-```javascript
-function validarRetirada(estoqueAtual, quantidadeRetirada)
-```
+---
 
-A função impede:
+### 🔎 Filtro de Pesquisa
+Permite buscar materiais em tempo real pelo nome (`input-busca`).
 
-* Quantidades negativas
-* Quantidade igual a zero
-* Quantidades maiores que o estoque disponível
+---
 
-Após a validação, a quantidade é atualizada na MockAPI utilizando o método PUT.
+### 📊 Total de Itens
+Exibe a quantidade total de materiais no sistema (`#total-itens`).
 
-### Exclusão de Materiais (DELETE)
+---
 
-Permite remover materiais do sistema utilizando o método DELETE da MockAPI.
+### 📉 Baixa de Estoque (PUT)
+Permite reduzir a quantidade de um material após validação:
 
-Após a exclusão, a lista é atualizada automaticamente.
+- Não permite valores ≤ 0
+- Não permite retirada maior que o estoque
 
-## Regras de Negócio
+---
 
-* Não é permitido cadastrar materiais com quantidade menor ou igual a zero.
-* Não é permitido retirar quantidade igual ou menor que zero.
-* Não é permitido retirar quantidade superior ao estoque disponível.
-* A exclusão remove permanentemente o material da base de dados.
+### 🗑 Exclusão de Materiais (DELETE)
+Remove materiais do sistema e atualiza a lista automaticamente.
 
-## Estrutura do Projeto
+---
 
-* index.html → Estrutura da página.
-* style.css → Estilização da interface.
-* main.js → Lógica da aplicação e integração com a API.
+### 🚨 Estoque Crítico
+Materiais com quantidade menor que 10 unidades recebem destaque visual com a classe:
 
-## Autor
+`.estoque-critico`
 
-Anderson Caetano
+---
+
+### ⚠️ Tratamento de Erros
+O sistema utiliza `try/catch` em todas as requisições `fetch` para evitar falhas e melhorar a estabilidade.
+
+---
+
+## 📁 Estrutura do Projeto
+
+- index.html → estrutura da página  
+- style.css → estilização  
+- main.js → lógica da aplicação  
+- README.md → documentação  
+
+---
+
+## 👨‍💻 Autor
+
+Anderson Caetano  
 Curso de Análise e Desenvolvimento de Sistemas – UNICESUMAR
